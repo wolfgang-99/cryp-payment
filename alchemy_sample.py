@@ -1,0 +1,16 @@
+webhook_sample = {'webhookId': 'wh_4pavz4885fd6ruf8', 
+ 'id': 'whevt_24w3cwyyapotvbqv',
+ 'createdAt': '2026-01-09T08:15:33.448Z', 
+ 'type': 'ADDRESS_ACTIVITY', 
+ 'event': {'network': 'BNB_TESTNET', 
+           'activity': [{'fromAddress': '0xc206146f964965972d0853aae1d58793b19dd0ce', 
+                         'toAddress': '0x2c6e9a63aae71f1be778dc2b7a7cebcb09308b59', 
+                         'blockNum': '0x4f87e85', 
+                         'hash': '0x0378d71019906c758e35a0fb1c0852adac3d4f0b415e4a67a3756297f0abad43', 
+                         'value': 0.001, 
+                         'asset': 'BNB', 
+                         'category': 'external', 
+                         'rawContract': {'rawValue': '0x38d7ea4c68000', 'decimals': 18}, 
+                         'blockTimestamp': '0x6960b925'}], 
+           'source': 'chainlake-kafka'}
+}

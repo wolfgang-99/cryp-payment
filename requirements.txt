@@ -1,0 +1,8 @@
+flask==3.1.1
+web3==7.14.0
+python-dotenv==1.0.0
+pymongo==4.13.2
+cryptography==41.0.7
+ngrok
+apscheduler
+setuptools

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crypto Payment</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <div id="payment-container">
+        <h2>Complete Your Payment</h2>
+        <div id="payment-info"></div>
+        <div id="qrcode"></div>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        async function createPayment() {
+            const response = await fetch('/api/payment/create', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    amount: '0.0001',
+                    currency: 'BNB',
+                    user_id: 123,
+                    order_id: 'ORDER_' + Date.now()
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                displayPayment(data.payment);
+                pollPaymentStatus(data.payment.order_id);
+            }
+        }
+        
+        function displayPayment(payment) {
+            document.getElementById('payment-info').innerHTML = `
+                <p><strong>Send exactly:</strong> ${payment.amount} ${payment.currency}</p>
+                <p><strong>To address:</strong><br>
+                <code style="word-break: break-all;">${payment.payment_address}</code></p>
+                <p><strong>Expires:</strong> ${new Date(payment.expires_at).toLocaleString()}</p>
+            `;
+            
+            // Generate QR code
+            new QRCode(document.getElementById('qrcode'), {
+                text: payment.payment_address,
+                width: 256,
+                height: 256
+            });
+        }
+        
+        function pollPaymentStatus(orderId) {
+            const interval = setInterval(async () => {
+                const response = await fetch(`/api/payment/status/${orderId}`);
+                const data = await response.json();
+                
+                const statusDiv = document.getElementById('status');
+                statusDiv.innerHTML = `<p>Status: <strong>${data.status}</strong></p>`;
+                
+                if (data.status === 'confirmed') {
+                    statusDiv.innerHTML += '<p style="color: green;">✅ Payment Confirmed!</p>';
+                    clearInterval(interval);
+                } else if (data.status === 'expired') {
+                    statusDiv.innerHTML += '<p style="color: red;"> ❌Payment Expired</p>';
+                    clearInterval(interval);
+                } else if (data.confirmations > 0) {
+                    statusDiv.innerHTML += `<p>Confirmations: ${data.confirmations}/12</p>`;
+                }
+            }, 5000); // Check every 5 seconds
+        }
+        
+        // Initialize payment on page load
+        createPayment();
+    </script>
+</body>
+</html>
