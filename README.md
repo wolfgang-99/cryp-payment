@@ -56,13 +56,27 @@ Create a `.env` file in your project root:
 
 ```env
 MONGODB_URI=mongodb://localhost:27017
-MONGODB_DB=payments
+MONGODB_DB=cryp-payment
+BSC_TESTNET_RPC_URL=https://data-seed-prebsc-1-s1.bnbchain.org:8545
 BSC_RPC_URL=https://bsc-dataseed.binance.org/
-PAYMENT_PRIVATE_KEY=your-private-key
+MAIN_WALLET=your-BSC-wallet address
+PAYMENT_PRIVATE_KEY=your-wallet-private-key
 ENCRYPTION_KEY=your-32-byte-encryption-key
 ALCHEMY_AUTH_TOKEN=your-alchemy-token
 ALCHEMY_WEBHOOK_ID=your-webhook-id
 PAYMENT_TIMEOUT_MINUTES=30
+```
+
+## Generating ENCRYPTION KEY
+create an `ENCRYPTION_KEY` by entering the promot in your terminal:
+
+#### Linux
+```bash
+python3 -c "import base64; from cryptography.fernet import Fernet; print(base64.b64encode(Fernet.generate_key()).decode())"
+```
+#### Windows
+```bash
+python -c "import base64; from cryptography.fernet import Fernet; print(base64.b64encode(Fernet.generate_key()).decode())"
 ```
 
 ## Documentation
